@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Arabic Alphabet Basic Keyboard</title>
+    <style>
+
+        /* The page uses a serif font throughout. */
+        * {
+            font-family: arial, sans-serif;
+        }
+
+
+        button {
+            font-size: 3em;
+            margin: 0.4em;
+            padding: 0.2em;
+            border-radius: 0.3em;
+            background-color: whitesmoke;
+            border-color: gray;
+            border-width: 0.12em;
+        }
+
+        /* Round the text area, where the line ends. In a right to left language
+         this border rounding is at the top-left */
+        textarea {
+            font-size: 3em;
+
+            /* Dear future programmer,
+              Switch the values of border-top-left-radius
+              and border-top-right-radius when modifying this
+              code to write text for a language that flows in a different direction.
+            */
+            border-top-left-radius: 1.0em;
+            border-top-right-radius: 0.0em;
+            
+            top: 0px;
+            height: 33vh
+        }
+
+        h2 {
+            margin-top: 1.5em;
+            margin-bottom: 0.0em;
+            text-align: center;
+        }
+
+        /* Some classes for style, for those programmers who want
+        a more specific style:
+        .punctuation {}
+        .alphabet {}
+        .whitespace {}
+        .combinations {}
+        .finals {}
+        */
+    </style>
+
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script>
+
+        var aboutThisApplication = "This is for causing the computer to speak out the names of the Arabic letters. Make sure your sound is on. This works on modern web browsers. You can find more about the software developer at the following web address: https://www.github.com/elsanussi-s-mneina";
+
+        // A variable that defines the Arabic alphabet.
+        // Each character is defined as the 
+        // text that it will write in the text box,
+        // the buttonLabel which is the text that is written on the button
+        // and the description, which is what a screenreader would describe
+        // the button as.
+        var alphabet = [
+            { text: "\u0627", buttonLabel: "\u0627 alif", description: "alif", oggAudioFile: "audio/0627.ogg", mp3AudioFile: "audio/0627.mp3", audioId: "alifAudio" },
+            { text: "\u0628", buttonLabel: "\u0628 baa", description: "baa", oggAudioFile: "audio/0628.ogg", mp3AudioFile: "audio/0628.mp3", audioId: "baaAudio" },
+            { text: "\u062A", buttonLabel: "\u062A taa", description: "taa", oggAudioFile: "audio/062A.ogg", mp3AudioFile: "audio/062A.mp3", audioId: "taaAudio" },
+            { text: "\u062B", buttonLabel: "\u062B thaa", description: "thaa", oggAudioFile: "audio/062B.ogg", mp3AudioFile: "audio/062B.mp3", audioId: "thaaAudio" },
+            { text: "\u062C", buttonLabel: "\u062C jiim", description: "jiim", oggAudioFile: "audio/062C.ogg", mp3AudioFile: "audio/062C.mp3", audioId: "jiimAudio" },
+            { text: "\u062D", buttonLabel: "\u062D Haa", description: "Pharyngeal Haa", oggAudioFile: "audio/062D.ogg", mp3AudioFile: "audio/062D.mp3", audioId: "pharyngealHaaAudio" },
+            { text: "\u062E", buttonLabel: "\u062E khaa", description: "khaa", oggAudioFile: "audio/062E.ogg", mp3AudioFile: "audio/062E.mp3", audioId: "khaaAudio" },
+            { text: "\u062F", buttonLabel: "\u062F daal", description: "daal", oggAudioFile: "audio/062F.ogg", mp3AudioFile: "audio/062F.mp3", audioId: "daalAudio" },
+            { text: "\u0630", buttonLabel: "\u0630 dhaal", description: "dhaal", oggAudioFile: "audio/0630.ogg", mp3AudioFile: "audio/0630.mp3", audioId: "dhaalAudio" },
+            { text: "\u0631", buttonLabel: "\u0631 raa", description: "raa", oggAudioFile: "audio/0631.ogg", mp3AudioFile: "audio/0631.mp3", audioId: "raaAudio" },
+            { text: "\u0632", buttonLabel: "\u0632 zayn", description: "zayn", oggAudioFile: "audio/0632.ogg", mp3AudioFile: "audio/0632.mp3", audioId: "zaynAudio" },
+            { text: "\u0633", buttonLabel: "\u0633 siin", description: "siin", oggAudioFile: "audio/0633.ogg", mp3AudioFile: "audio/0633.mp3", audioId: "siinAudio" },
+            { text: "\u0634", buttonLabel: "\u0634 shiin", description: "shiin", oggAudioFile: "audio/0634.ogg", mp3AudioFile: "audio/0634.mp3", audioId: "shiinAudio" },
+            { text: "\u0635", buttonLabel: "\u0635 Saad", description: "Saad", oggAudioFile: "audio/0635.ogg", mp3AudioFile: "audio/0635.mp3", audioId: "saadAudio" },
+            { text: "\u0636", buttonLabel: "\u0636 Daad", description: "Daad", oggAudioFile: "audio/0636.ogg", mp3AudioFile: "audio/0636.mp3", audioId: "daadAudio" },
+            { text: "\u0637", buttonLabel: "\u0637 Taa", description: "Pharyngealized Taa", oggAudioFile: "audio/0637.ogg", mp3AudioFile: "audio/0637.mp3", audioId: "pharyngealizedTaaAudio" },
+            { text: "\u0638", buttonLabel: "\u0638 Dhaa", description: "Dhaa", oggAudioFile: "audio/0638.ogg", mp3AudioFile: "audio/0638.mp3", audioId: "DhaaAudio" },
+            { text: "\u0639", buttonLabel: "\u0639 Ayn", description: "Ayn", oggAudioFile: "audio/0639.ogg", mp3AudioFile: "audio/0639.mp3", audioId: "aynAudio" },
+            { text: "\u063A", buttonLabel: "\u063A ghayn", description: "ghayn", oggAudioFile: "audio/063A.ogg", mp3AudioFile: "audio/063A.mp3", audioId: "ghaynAudio" },
+            { text: "\u0641", buttonLabel: "\u0641 faa", description: "faa", oggAudioFile: "audio/0641.ogg", mp3AudioFile: "audio/0641.mp3", audioId: "faaAudio" },
+            { text: "\u0642", buttonLabel: "\u0642 qaaf", description: "qaaf", oggAudioFile: "audio/0642.ogg", mp3AudioFile: "audio/0642.mp3", audioId: "qaafAudio" },
+            { text: "\u0643", buttonLabel: "\u0643 kaaf", description: "kaaf", oggAudioFile: "audio/0643.ogg", mp3AudioFile: "audio/0643.mp3", audioId: "kaafAudio" },
+            { text: "\u0644", buttonLabel: "\u0644 laam", description: "laam", oggAudioFile: "audio/0644.ogg", mp3AudioFile: "audio/0644.mp3", audioId: "laamAudio" },
+            { text: "\u0645", buttonLabel: "\u0645 miim", description: "miim", oggAudioFile: "audio/0645.ogg", mp3AudioFile: "audio/0645.mp3", audioId: "miimAudio" },
+            { text: "\u0646", buttonLabel: "\u0646 nuun", description: "nuun", oggAudioFile: "audio/0646.ogg", mp3AudioFile: "audio/0646.mp3", audioId: "nuunAudio" },
+            { text: "\u0647", buttonLabel: "\u0647 haa", description: "haa", oggAudioFile: "audio/0647.ogg", mp3AudioFile: "audio/0647.mp3", audioId: "haaAudio" },
+            { text: "\u0648", buttonLabel: "\u0648 waaw", description: "waaw", oggAudioFile: "audio/0648.ogg", mp3AudioFile: "audio/0648.mp3", audioId: "waawAudio" },
+            { text: "\u064A", buttonLabel: "\u064A yaa", description: "yaa", oggAudioFile: "audio/064A.ogg", mp3AudioFile: "audio/064A.mp3", audioId: "yaaAudio" },
+        ];
+        
+        var finalCharacters = [
+            { text: "\u0629", buttonLabel: "\u0629 taa marbuuTah", description: "taa marbuuTah", oggAudioFile: "audio/0629.ogg", mp3AudioFile: "audio/0629.mp3", audioId: "taaMarbuutahAudio"  },
+            { text: "\u0649", buttonLabel: "\u0649 alif maqSuurah", description: "alif maqSuurah", oggAudioFile: "audio/0649.ogg", mp3AudioFile: "audio/0649.mp3", audioId: "alifMaqsuuraAudio"  },
+            { text: "\u0621", buttonLabel: "\u0621 hamzah", description: "hamzah", oggAudioFile: "audio/0621.ogg", mp3AudioFile: "audio/0621.mp3", audioId: "hamzahAudio"  },
+        ];
+        
+        // This function returns a function that speaks
+        // audio
+        function onClickButtonForSpeaking(audioIdToSpeak) {
+            function enclosedFunction() {
+                var audioElement = document.getElementById(audioIdToSpeak);
+                audioElement.play();
+            }
+            return enclosedFunction;
+        }
+
+
+        function createButtonForSpeaking(letter) {
+            return createLabelledButtonForSpeaking(letter.text, letter.buttonLabel, letter.description, letter.audioId);
+        }
+
+        function createLabelledButtonForSpeaking(textToWrite, buttonLabel, description, audioId) {
+            var aButton = document.createElement("button");
+            var textNode = document.createTextNode(buttonLabel);
+            aButton.appendChild(textNode);
+            aButton.ariaLabel = description;
+            aButton.onclick = onClickButtonForSpeaking(audioId);
+            return aButton;
+        }
+
+
+        // Create a heading of a particular level.
+        // This first argument is a number such as "1", "2", all the way to "6".
+        // The second argument is the text to show in the heading.
+        function createHeading(level, textToShow) {
+            var element = document.createElement("h" + level);
+            var textNode = document.createTextNode(textToShow);
+            element.appendChild(textNode);
+            return element;
+        }
+
+
+        function createAudioElement(id, mp3FilePath, oggFilePath) {
+                // Creating HTML similar to the following
+                // code from https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_audio_play
+                // accessed at Wednesday, April 13, 2022.
+                // <audio id="myAudio">
+                //     <source src="horse.ogg" type="audio/ogg">
+                //     <source src="horse.mp3" type="audio/mpeg">
+                //     Your browser does not support the audio element.
+                // </audio>
+
+
+                var audioElement = document.createElement("audio");
+                audioElement.id = id;
+
+                if (oggFilePath) {
+                    var oggSourceElement = document.createElement("source");
+                    oggSourceElement.src = oggFilePath;
+                    oggSourceElement.type = "audio/ogg";
+                    audioElement.appendChild(oggSourceElement);
+                }
+
+                if (mp3FilePath) {
+                    var mp3SourceElement = document.createElement("source");
+                    mp3SourceElement.src = mp3FilePath;
+                    mp3SourceElement.type = "audio/mpeg"; 
+                    audioElement.appendChild(mp3SourceElement);
+                }
+                var noSupportMessage = document.createTextNode("Cannot play audio because your browser does not support the audio element.");
+                audioElement.appendChild(noSupportMessage)
+                return audioElement;
+            }
+
+
+        function attachButtonsForSpeaking(idOfRootElement) {
+            var root = document.getElementById(idOfRootElement);
+
+            root.dir = "rtl";
+
+            var audioSectionDiv = document.createElement("div");
+            for (var i = 0; i < alphabet.length; i++) {
+                root.appendChild(createAudioElement(alphabet[i].audioId, alphabet[i].mp3AudioFile, alphabet[i].oggAudioFile))
+            }
+
+            for (var i = 0; i < finalCharacters.length; i++) {
+                root.appendChild(createAudioElement(finalCharacters[i].audioId, finalCharacters[i].mp3AudioFile, finalCharacters[i].oggAudioFile))
+            }
+
+            root.appendChild(audioSectionDiv);
+
+            var alphabetDiv = document.createElement("div");
+            alphabetDiv.className = "alphabet";
+            root.appendChild(createHeading(2, "Arabic Alphabet: Play Audio of Letter Names"))
+
+            root.appendChild(createParagraph(aboutThisApplication));
+
+            for (var i = 0; i < alphabet.length; i++) {
+                alphabetDiv.appendChild(createButtonForSpeaking(alphabet[i]));
+            }
+            root.appendChild(alphabetDiv);
+
+            var finalCharactersDiv = document.createElement("div");
+            root.appendChild(createHeading(2, "Other Characters"))
+
+            finalCharactersDiv.className = "finals";
+            for (var i = 0; i < finalCharacters.length; i++) {
+                finalCharactersDiv.appendChild(createButtonForSpeaking(finalCharacters[i]));
+            }
+            root.appendChild(finalCharactersDiv);
+        }
+
+        // Create heading for the whole 
+        // application.
+        function createAppHeading() {
+            var heading1 = createHeading("1", "Arabic Alphabet Spelling Keyboard");
+            return heading1;
+        }
+
+        function createParagraph(someText) {
+            var paragraph = document.createElement("p");
+            paragraph.dir = "ltr";
+            var textElement = document.createTextNode(someText);
+            paragraph.appendChild(textElement);
+            return paragraph;
+        }
+
+        // Create a footer.
+        function createFooter() {
+            var footer = document.createElement("footer");
+
+            return footer;
+        }
+
+        root.appendChild(document.createComment("Start of HTML code generated by Javascript."));
+        attachButtonsForSpeaking("root");
+        root.appendChild(createFooter());
+
+
+        root.appendChild(document.createComment("End of HTML code generated by Javascript."));
+    </script>
+
+</body>
+<!-- Created by Elsanussi Mneina (he/him). You can contact me (Elsanussi Mneina) at grassdewmorning@gmail.com, mentioning this page)
+  This single page web application for playing audio of Arabic letter names was first released to the public on April 13, 2022 on GitHub under an MIT license.
+https://github.com/elsanussi-s-mneina/hebrew-alphabet-syllabic-keyboard-html-js/
+Here is the LICENSE for this web application:
+MIT License
+Copyright (c) 2022 Elsanussi Mneina
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+
+</html>
